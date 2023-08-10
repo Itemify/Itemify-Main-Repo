@@ -1,0 +1,9 @@
+[submodule "Itemify-Frontend"]
+	path = Itemify-Frontend
+	url = git@github.com:Itemify/Itemify-Frontend.git
+[submodule "itemify-python-backend"]
+	path = itemify-python-backend
+	url = git@github.com:Itemify/itemify-python-backend.git
+[submodule "itemify-cura-api"]
+	path = itemify-cura-api
+	url = git@github.com:Itemify/itemify-cura-api.git

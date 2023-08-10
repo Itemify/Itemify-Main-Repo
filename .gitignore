@@ -1,0 +1,6 @@
+frontend.env
+backend.env
+cura.env
+hasura.env
+bookstack_db_data/
+bookstack_app_data/

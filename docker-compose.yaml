@@ -1,0 +1,76 @@
+version: "3.9"
+
+services:
+  itemify-frontend:
+    container_name: itemify-frontend
+    build: 
+      context: ./Itemify-Frontend/
+    ports:
+      - 3008:3000
+    restart: always
+    env_file:
+      - frontend.env
+
+  itemify-backend:
+    container_name: itemify-backend
+    build: ./itemify-python-backend/
+    ports:
+      - 3009:3000
+    restart: always
+    env_file:
+      - backend.env
+
+  cura-api:
+    container_name: cura-api
+    build: ./itemify-cura-api/
+    ports:
+      - 5800:9000
+    environment:
+      - CURA_ENGINE_SEARCH_PATH=/usr/share/cura/resources/definitions
+    volumes:
+      - ./cura-engine-api/config:/etc/cura-api/config/
+      - ./cura-engine-api/scripts:/var/scripts
+      - ./cura-engine-api/models:/models
+    restart: always
+  
+  graphql-engine:
+    image: hasura/graphql-engine:v2.0.10
+    ports:
+    - "8081:8080"
+    restart: always
+    env_file:
+      - hasura.env
+
+  bookstack:
+    image: lscr.io/linuxserver/bookstack
+    container_name: bookstack
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - APP_URL=https://wiki.itemify.eu
+      - DB_HOST=bookstack_db
+      - DB_PORT=3306
+      - DB_USER=bookstack
+      - DB_PASS=b9u3108f091n90n9ßcni010
+      - DB_DATABASE=bookstackapp
+    volumes:
+      - ./bookstack_app_data:/config
+    ports:
+      - 6875:80
+    restart: unless-stopped
+    depends_on:
+      - bookstack_db
+  bookstack_db:
+    image: lscr.io/linuxserver/mariadb
+    container_name: bookstack_db
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - MYSQL_ROOT_PASSWORD=b9u3108f091n90n9ßcni010faefawf
+      - TZ=Europe/London
+      - MYSQL_DATABASE=bookstackapp
+      - MYSQL_USER=bookstack
+      - MYSQL_PASSWORD=b9u3108f091n90n9ßcni010
+    volumes:
+      - ./bookstack_db_data:/config
+    restart: unless-stopped
